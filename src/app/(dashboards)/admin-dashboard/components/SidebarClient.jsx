@@ -1,0 +1,262 @@
+"use client";
+import { useState, useEffect, Children } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+    FiMenu,
+    FiX,
+    FiHome,
+    FiUsers,
+    FiShoppingBag,
+    FiSettings,
+    FiBarChart,
+    FiPackage,
+    FiChevronDown,
+    FiChevronRight,
+    FiPlus,
+    FiBox ,
+    FiTag,
+} from "react-icons/fi";
+import Logo from "@/app/components/navbar/Logo";
+import { MdOutlineDelete } from "react-icons/md";
+
+export default function SidebarClient() {
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [openMenu, setOpenMenu] = useState(null);
+    const pathname = usePathname();
+
+    useEffect(() => {
+        document.body.style.overflow = mobileOpen ? "hidden" : "";
+    }, [mobileOpen]);
+
+    const navItems = [
+        {
+            href: "/admin-dashboard",
+            label: "Dashboard",
+            icon: FiHome,
+            color: "text-blue-500"
+        },
+        {
+            label: "Products",
+            icon: FiPackage,
+            color: "text-green-500",
+            children: [
+                {
+                    href: "/admin-dashboard/products/all-products",
+                    label: "All Products",
+                    icon: FiBox,
+                    color: "text-blue-500"
+                },
+                {
+                    href: "/admin-dashboard/products/add",
+                    label: "Add Product",
+                    icon: FiPlus,
+                    color: "text-green-500"
+                },
+
+            ],
+        },
+        {
+            label: "Categories",
+            icon: FiTag,
+            color: "text-blue-500",
+            children: [
+                {
+                    href: "/admin-dashboard/categories/add",
+                    label: "Add Categories",
+                    icon: FiPlus,
+                    color: "text-blue-500"
+                },
+                {
+                    href: "/admin-dashboard/categories/delete",
+                    label: "Delete Categories",
+                    icon: MdOutlineDelete,
+                    color: "text-blue-500"
+                },
+            ]
+        },
+        {
+            href: "/admin-dashboard/users",
+            label: "Users",
+            icon: FiUsers,
+            color: "text-purple-500"
+        },
+        {
+            href: "/admin-dashboard/orders",
+            label: "Orders",
+            icon: FiShoppingBag,
+            color: "text-orange-500"
+        },
+        {
+            href: "/admin-dashboard/analytics",
+            label: "Analytics",
+            icon: FiBarChart,
+            color: "text-cyan-500"
+        },
+        {
+            href: "/admin-dashboard/settings",
+            label: "Settings",
+            icon: FiSettings,
+            color: "text-gray-500"
+        },
+    ];
+
+    const renderNav = (isMobile = false) => (
+        <nav className="space-y-1 p-4">
+            {navItems.map((item) => {
+                const Icon = item.icon;
+                const isOpen = openMenu === item.label;
+                const hasChildren = item.children;
+
+                if (hasChildren) {
+                    return (
+                        <div key={item.label} className="group">
+                            <button
+                                onClick={() => setOpenMenu(isOpen ? null : item.label)}
+                                className={`flex items-center justify-between w-full px-4 py-3 rounded-xl transition-all duration-300 text-gray-700 hover:bg-gray-50 hover:shadow-md cursor-pointer ${isOpen && 'shadow-lg '}
+                                    `}
+                            >
+                                <span className="flex items-center gap-3">
+                                    <div className={`p-2 rounded-lg ${isOpen ? "bg-white/20" : "bg-gray-100 group-hover:bg-main/10"}`}>
+                                        <Icon className={`w-4 h-4 ${item.color}`} />
+                                    </div>
+                                    <span className="font-medium">{item.label}</span>
+                                </span>
+                                <FiChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-180" : "text-gray-400"}`} />
+                            </button>
+
+                            {/* Submenu with enhanced design */}
+                            {isOpen && (
+                                <div className="ml-6 mt-2 space-y-1 border-l-2 border-main/20 pl-4 py-2">
+                                    {item.children.map((sub) => {
+                                        const SubIcon = sub.icon;
+                                        const active = pathname === sub.href;
+
+                                        return (
+                                            <Link
+                                                key={sub.href}
+                                                href={sub.href}
+                                                {...(isMobile && {
+                                                    onClick: () => setMobileOpen(false),
+                                                })}
+                                                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group ${active
+                                                    ? "bg-gradient-to-r from-main to-cyan-500 text-white shadow-md transform scale-105"
+                                                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm hover:translate-x-1"
+                                                    }`}
+                                            >
+                                                <div className={`p-1.5 rounded-md ${active ? "bg-white/20" : "bg-gray-100 group-hover:bg-main/10"}`}>
+                                                    <SubIcon className={`w-3.5 h-3.5 ${active ? "text-white" : sub.color}`} />
+                                                </div>
+                                                <span className="text-sm font-medium">{sub.label}</span>
+                                                {active && (
+                                                    <FiChevronRight className="w-3 h-3 ml-auto text-white/80" />
+                                                )}
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    );
+                }
+
+                const active = pathname === item.href;
+
+                return (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        {...(isMobile && {
+                            onClick: () => setMobileOpen(false),
+                        })}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${active
+                            ? "bg-gradient-to-r from-main to-cyan-500 text-white shadow-lg "
+                            : "text-gray-700 hover:bg-gray-50 hover:shadow-md "
+                            }`}
+                    >
+                        <div className={`p-2 rounded-lg ${active ? "bg-white/20" : "bg-gray-100 group-hover:bg-main/10"}`}>
+                            <Icon className={`w-4 h-4 ${active ? "text-white" : item.color}`} />
+                        </div>
+                        <span className="font-medium">{item.label}</span>
+                    </Link>
+                );
+            })}
+        </nav>
+    );
+
+    return (
+        <>
+            {/* MOBILE TOP BAR - Enhanced */}
+            <div className="lg:hidden flex bg-white items-center justify-between p-4 shadow-lg sticky top-0 z-50">
+                <Link href="/" className="flex items-center gap-3">
+                    <div className="relative group">
+                        <div className={`absolute inset-0 bg-gradient-to-r from-main to-purple-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300`}></div>
+                        <div className="relative bg-white rounded-xl p-2">
+                            <Logo />
+                        </div>
+                    </div>
+                </Link>
+                <button
+                    onClick={() => setMobileOpen(true)}
+                    className="p-2 rounded-lg hover:bg-white/20 transition-colors duration-200"
+                >
+                    <FiMenu className="w-6 h-6" />
+                </button>
+            </div>
+
+            {/* DESKTOP SIDEBAR - Enhanced */}
+            <aside className="hidden lg:flex flex-col w-72 bg-white border-r shadow-xl h-screen sticky top-0">
+                {/* Header */}
+                <div className="p-4">
+                    <Link href="/" className="flex items-center gap-3">
+                        <div className="relative group">
+                            <div className={`absolute inset-0 bg-gradient-to-r from-main to-purple-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300`}></div>
+                            <div className="relative bg-white rounded-xl p-2">
+                                <Logo />
+                            </div>
+                        </div>
+                    </Link>
+                </div>
+
+                {/* Navigation */}
+                <div className="flex-1 overflow-y-auto py-4">
+                    {renderNav()}
+                </div>
+            </aside>
+
+            {/* MOBILE SLIDE SIDEBAR - Enhanced */}
+            <div
+                className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-1080 transform transition-transform duration-300 lg:hidden ${mobileOpen ? "translate-x-0" : "translate-x-full"
+                    }`}
+            >
+                {/* Mobile Header */}
+                <div className="p-3 bg-gradient-to-r from-main to-cyan-500 text-white flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="bg-white/20 p-2 rounded-xl">
+                            <Logo />
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => setMobileOpen(false)}
+                        className="p-2 rounded-lg hover:bg-white/20 transition-colors duration-200"
+                    >
+                        <FiX className="w-6 h-6" />
+                    </button>
+                </div>
+
+                {/* Mobile Navigation */}
+                <div className="h-full overflow-y-auto pb-20">
+                    {renderNav(true)}
+                </div>
+            </div>
+
+            {/* Backdrop for mobile */}
+            {mobileOpen && (
+                <div
+                    className="fixed inset-0 top-0  backdrop-blur-xs bg-transparent z-1070 lg:hidden"
+                    onClick={() => setMobileOpen(false)}
+                />
+            )}
+        </>
+    );
+}

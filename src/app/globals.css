@@ -1,0 +1,39 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+:root {
+  --background: #f3f3f3;
+  --foreground: #171717;
+  --main: #06b6d4;
+  --second: #8E24AA; 
+  --light-yellow: #F5F5DC;
+}
+
+
+@theme  {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-main:var(--main);
+  --color-second: var(--second);
+  --font-poppins: var(--font-poppins);
+}
+
+
+html , body {
+  background: var(--background);
+  color-scheme: light ;
+  color: var(--foreground);
+  font-family: var(--font-poppins);
+}
+
+
+@media all and (max-width: 1450px) {
+  :root{
+    font-size: 14px;
+  }
+}
+@media all and (max-width: 1300px) {
+  :root{
+    font-size: 12px;
+  }
+}
