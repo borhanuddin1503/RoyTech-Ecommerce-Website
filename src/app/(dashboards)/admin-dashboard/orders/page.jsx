@@ -6,11 +6,33 @@ import { MdEventNote } from 'react-icons/md';
 import StatusBadge from './StatusBadge';
 import OrderDetailsModal from './OrderDetailsModal';
 
+
+
+// Payment status badge component
+export const PaymentBadge = ({ status, method }) => {
+    const isPaid = status === 'paid';
+    const methodIcon = method === 'online' ? <FiCreditCard className="w-3 h-3" /> : <FiPackage className="w-3 h-3" />;
+
+    return (
+        <div className="flex flex-col gap-1 items-center">
+            <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${isPaid ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200'
+                }`}>
+                {isPaid ? <FiCheckCircle className="w-3 h-3" /> : <FiXCircle className="w-3 h-3" />}
+                {isPaid ? 'Paid' : 'Unpaid'}
+            </span>
+            {method && <span className="text-xs text-gray-500 flex items-center gap-1">
+                {methodIcon}
+                {method === 'online' ? 'Online' : 'COD'}
+            </span>}
+        </div>
+    );
+};
+
 const OrdersTable = () => {
 
     const [page, setPage] = useState(1);
     const [showDetails, setShowDetails] = useState(false);
-    const [selectedOrder , setSelectedOrder] = useState(null);
+    const [selectedOrder, setSelectedOrder] = useState(null);
     const limit = 7;
 
     const { data, isLoading } = useQuery({
@@ -45,25 +67,6 @@ const OrdersTable = () => {
 
 
 
-    // Payment status badge component
-    const PaymentBadge = ({ status, method }) => {
-        const isPaid = status === 'paid';
-        const methodIcon = method === 'online' ? <FiCreditCard className="w-3 h-3" /> : <FiPackage className="w-3 h-3" />;
-
-        return (
-            <div className="flex flex-col gap-1">
-                <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${isPaid ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200'
-                    }`}>
-                    {isPaid ? <FiCheckCircle className="w-3 h-3" /> : <FiXCircle className="w-3 h-3" />}
-                    {isPaid ? 'Paid' : 'Unpaid'}
-                </span>
-                <span className="text-xs text-gray-500 flex items-center gap-1">
-                    {methodIcon}
-                    {method === 'online' ? 'Online' : 'COD'}
-                </span>
-            </div>
-        );
-    };
 
     if (isLoading) {
         return <p>Loading...</p>
@@ -83,29 +86,29 @@ const OrdersTable = () => {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto text-center">
                 <table className="w-full">
                     <thead className="bg-gray-50">
                         <tr>
-                            <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            <th className="text-center py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                                 Order ID
                             </th>
-                            <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            <th className="text-center py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                                 Customer
                             </th>
-                            <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            <th className="text-center py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                                 Amount
                             </th>
-                            <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            <th className="text-center py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                                 Payment
                             </th>
-                            <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            <th className="text-center py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                                 Status
                             </th>
-                            <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            <th className="text-center py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                                 Date
                             </th>
-                            <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            <th className="text-center py-3 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                                 Actions
                             </th>
                         </tr>
@@ -131,14 +134,14 @@ const OrdersTable = () => {
                                     <div className="text-xs text-gray-500">
                                         {order.customer.phone}
                                     </div>
-                                    <div className="text-xs text-gray-400 truncate max-w-[150px]">
+                                    <div className="text-xs text-gray-400 truncate ">
                                         {order.customer.district}
                                     </div>
                                 </td>
 
                                 {/* Amount */}
                                 <td className="py-4 px-6">
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 justify-center">
                                         <span className="text-lg font-bold text-gray-900">
                                             ৳{order.amount}
                                         </span>
@@ -180,10 +183,11 @@ const OrdersTable = () => {
 
                                 {/* Actions */}
                                 <td className="py-4 px-6">
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center justify-center gap-2">
                                         <button className="p-2 border border-gray-300 rounded-lg hover:border-main hover:text-main transition-colors duration-200" onClick={() => {
-                                            setSelectedOrder(order) ;
-                                            setShowDetails(!showDetails)}}>
+                                            setSelectedOrder(order);
+                                            setShowDetails(!showDetails)
+                                        }}>
                                             <FiEye className="w-4 h-4" />
                                         </button>
                                         <select className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 hover:border-main focus:border-main outline-none transition-colors duration-200">
@@ -204,7 +208,7 @@ const OrdersTable = () => {
             {/* Table Footer */}
             <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
                 <div className="text-sm text-gray-600">
-                    Showing {orders.length} of {orders.length} orders
+                    Showing {page * limit < totalOrder ? page * limit : totalOrder} of {totalOrder} orders
                 </div>
                 <div className="flex items-center gap-2">
                     <button className={`px-4 py-2 border border-gray-300 rounded-lg transition-colors duration-200 text-sm ${page === 1 ? 'bg-gray-200 cursor-not-allowed ' : 'hover:border-main hover:text-main cursor-pointer'}`}

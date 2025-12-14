@@ -11,12 +11,13 @@ export async function proxy(req) {
 
     if (!visitorCookie?.value) {
         const newVisitorId = nanoid();
+        const isProd = process.env.NODE_ENV === "production";
 
         res.cookies.set("visitorId", newVisitorId, {
             httpOnly: true,
-            secure: false,
-            sameSite: "none",
-            maxAge: 60 * 60 * 24 * 365, // 1 year
+            secure: isProd,
+            sameSite: isProd ? "none" : "lax",
+            maxAge: 60 * 60 * 24 * 365,
             path: "/",
         });
     }

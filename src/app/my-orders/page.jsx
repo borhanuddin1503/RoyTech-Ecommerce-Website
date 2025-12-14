@@ -8,6 +8,8 @@ import { MdOutlineEventNote } from 'react-icons/md';
 import StatusBadge from '../(dashboards)/admin-dashboard/orders/StatusBadge';
 import ProductsLoading from '../(dashboards)/admin-dashboard/products/all-products/productsLoading';
 import { useSession } from 'next-auth/react';
+import { PaymentBadge } from '../(dashboards)/admin-dashboard/orders/page';
+import PaymentGatewayCustomize from '../(dashboards)/admin-dashboard/components/PaymentGatewayCustomize';
 
 export default function MyOrders() {
 
@@ -74,6 +76,7 @@ export default function MyOrders() {
                             <th className="p-3">Order ID</th>
                             <th className="p-3">Date</th>
                             <th className="p-3">Total</th>
+                            <th className="p-3">Payment Status</th>
                             <th className="p-3">Payment Method</th>
                             <th className="p-3">Status</th>
                             <th className="p-3">Customer</th>
@@ -110,11 +113,16 @@ export default function MyOrders() {
                                 <td className="p-4 text-lg font-bold text-gray-900">
                                     ৳{order.amount}
                                 </td>
+                                
+                                {/* Payment status */}
+                                <td className="p-4 text-sm text-gray-900">
+                                    <PaymentBadge status={order.paymentStatus} method={order.paymentMethod}></PaymentBadge>
+                                </td>
 
                                 {/* Payment Method */}
-                                <td className="p-4 text-sm text-gray-700">
+                                <td className="p-4 text-sm text-green-500">
                                     {order.paymentMethod === 'online'
-                                        ? order.card_issuer
+                                        ? <PaymentGatewayCustomize paymentGateway={order.card_issuer}></PaymentGatewayCustomize>
                                         : "Cash On Delivery"}
                                 </td>
 

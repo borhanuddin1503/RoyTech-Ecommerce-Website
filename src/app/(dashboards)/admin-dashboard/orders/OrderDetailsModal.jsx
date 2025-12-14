@@ -2,6 +2,7 @@
 
 import { FiX, FiPackage, FiCreditCard, FiUser, FiCalendar, FiDollarSign, FiCheckCircle, FiClock, FiShoppingBag } from "react-icons/fi";
 import { useState } from "react";
+import Image from "next/image";
 
 const OrderDetailsModal = ({ order, isOpen, onClose }) => {
     if (!isOpen || !order) return null;
@@ -106,7 +107,6 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-600">Total Amount</span>
                                 <div className="flex items-center gap-2">
-                                    <FiDollarSign className="w-4 h-4 text-main" />
                                     <span className="text-xl font-bold text-main">৳{order.amount || order.customer?.amount}</span>
                                 </div>
                             </div>
@@ -183,20 +183,30 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
                         <div className="space-y-3">
                             {order.products?.map((product, index) => (
                                 <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
-                                    <div className="">
+                                    <div className="flex gap-5 ">
                                         <div>
-                                            <p className="font-medium text-gray-800">{product.title || "Product"}</p>
-                                            <p className="text-sm text-gray-500">Qty: {product.quantity || 1}</p>
+                                            <Image src={product?.image || product.images[0]}
+                                            width={60}
+                                            height={60}
+                                            alt={product.title}
+                                            ></Image>
                                         </div>
+                                        {/* text content */}
+                                        <div>
+                                            <div>
+                                                <p className="font-medium text-gray-800">{product.title || "Product"}</p>
+                                                <p className="text-sm text-gray-500">Qty: {product.quantity || 1}</p>
+                                            </div>
 
-                                        <div className="text-sm text-gray-500">
-                                            {product.selectedSize && <p>Size: {product?.selectedSize}</p>}
-                                            {product.selectedColor && <div className="flex gap-2">
-                                                <p>color: </p>
-                                                <div className={`h-5 w-5 rounded-full border`} style={{
-                                                    backgroundColor: product.selectedColor
-                                                }}></div>
-                                            </div>}
+                                            <div className="text-sm text-gray-500">
+                                                {product.selectedSize && <p>Size: {product?.selectedSize}</p>}
+                                                {product.selectedColor && <div className="flex gap-2">
+                                                    <p>color: </p>
+                                                    <div className={`h-5 w-5 rounded-full border`} style={{
+                                                        backgroundColor: product.selectedColor
+                                                    }}></div>
+                                                </div>}
+                                            </div>
                                         </div>
                                     </div>
                                     <span className="font-semibold">৳{product.price || product.discountedPrice}</span>
