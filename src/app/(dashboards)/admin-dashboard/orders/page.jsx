@@ -5,6 +5,7 @@ import { FiEye, FiCheckCircle, FiXCircle, FiCreditCard, FiPackage } from 'react-
 import { MdEventNote } from 'react-icons/md';
 import StatusBadge from './StatusBadge';
 import OrderDetailsModal from './OrderDetailsModal';
+import Swal from 'sweetalert2';
 
 
 
@@ -35,7 +36,7 @@ const OrdersTable = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const limit = 7;
 
-    const { data, isLoading } = useQuery({
+    const { data, isLoading , refetch } = useQuery({
         queryKey: ['orders', page],
         queryFn: async () => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/orders?page=${page}&limit=${limit}`);
@@ -64,6 +65,24 @@ const OrdersTable = () => {
             minute: '2-digit'
         });
     };
+
+
+
+    // handle change orderStatus
+    const handleChangeOrderStatus = async(_id , status) => {
+        const res = await fetch (`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/orders` , {
+            method: 'PATCH' , 
+            headers: {
+                'content-type' : 'application/json'
+            }, 
+            body: JSON.stringify({_id , status} )
+        });
+        const result = await res.json();
+        if(!result.success){
+            return Swal.fire('Error' , result.message , 'error')
+        };
+        return refetch()
+    }   
 
 
 
@@ -176,7 +195,7 @@ const OrdersTable = () => {
                                     </div>
                                     {order.updatedAt && (
                                         <div className="text-xs text-gray-500">
-                                            Updated: {formatDate(order.updatedAt).split(' ')[0]}
+                                            Updated: {formatDate(order.updatedAt)}
                                         </div>
                                     )}
                                 </td>
@@ -190,7 +209,10 @@ const OrdersTable = () => {
                                         }}>
                                             <FiEye className="w-4 h-4" />
                                         </button>
-                                        <select className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 hover:border-main focus:border-main outline-none transition-colors duration-200">
+                                        <select className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 hover:border-main focus:border-main outline-none transition-colors duration-200"
+                                            onChange={(e) => handleChangeOrderStatus(order._id , e.target.value)}
+                                            defaultValue={order.orderStatus}
+                                        >
                                             <option value="pending">Pending</option>
                                             <option value="processing">Processing</option>
                                             <option value="shipped">Shipped</option>

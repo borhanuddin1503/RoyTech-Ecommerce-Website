@@ -6,15 +6,9 @@ import {
     FiMenu,
     FiX,
     FiHome,
-    FiUsers,
     FiShoppingBag,
-    FiSettings,
-    FiBarChart,
-    FiPackage,
-    FiChevronDown,
-    FiChevronRight,
     FiPlus,
-    FiBox ,
+    FiBox,
     FiTag,
 } from "react-icons/fi";
 import Logo from "@/app/components/navbar/Logo";
@@ -36,50 +30,31 @@ export default function SidebarClient() {
             icon: FiHome,
             color: "text-blue-500"
         },
-        {
-            label: "Products",
-            icon: FiPackage,
-            color: "text-green-500",
-            children: [
-                {
-                    href: "/admin-dashboard/products/all-products",
-                    label: "All Products",
-                    icon: FiBox,
-                    color: "text-blue-500"
-                },
-                {
-                    href: "/admin-dashboard/products/add",
-                    label: "Add Product",
-                    icon: FiPlus,
-                    color: "text-green-500"
-                },
 
-            ],
+        {
+            href: "/admin-dashboard/products/all-products",
+            label: "All Products",
+            icon: FiBox,
+            color: "text-blue-500"
         },
         {
-            label: "Categories",
-            icon: FiTag,
-            color: "text-blue-500",
-            children: [
-                {
-                    href: "/admin-dashboard/categories/add",
-                    label: "Add Categories",
-                    icon: FiPlus,
-                    color: "text-blue-500"
-                },
-                {
-                    href: "/admin-dashboard/categories/delete",
-                    label: "Delete Categories",
-                    icon: MdOutlineDelete,
-                    color: "text-blue-500"
-                },
-            ]
+            href: "/admin-dashboard/products/add",
+            label: "Add Product",
+            icon: FiPlus,
+            color: "text-green-500"
+        },
+
+        {
+            href: "/admin-dashboard/categories/add",
+            label: "Add Categories",
+            icon: FiPlus,
+            color: "text-blue-500"
         },
         {
-            href: "/admin-dashboard/users",
-            label: "Users",
-            icon: FiUsers,
-            color: "text-purple-500"
+            href: "/admin-dashboard/categories/delete",
+            label: "Delete Categories",
+            icon: MdOutlineDelete,
+            color: "text-blue-500"
         },
         {
             href: "/admin-dashboard/orders",
@@ -87,79 +62,13 @@ export default function SidebarClient() {
             icon: FiShoppingBag,
             color: "text-orange-500"
         },
-        {
-            href: "/admin-dashboard/analytics",
-            label: "Analytics",
-            icon: FiBarChart,
-            color: "text-cyan-500"
-        },
-        {
-            href: "/admin-dashboard/settings",
-            label: "Settings",
-            icon: FiSettings,
-            color: "text-gray-500"
-        },
+     
     ];
 
     const renderNav = (isMobile = false) => (
         <nav className="space-y-1 p-4">
             {navItems.map((item) => {
                 const Icon = item.icon;
-                const isOpen = openMenu === item.label;
-                const hasChildren = item.children;
-
-                if (hasChildren) {
-                    return (
-                        <div key={item.label} className="group">
-                            <button
-                                onClick={() => setOpenMenu(isOpen ? null : item.label)}
-                                className={`flex items-center justify-between w-full px-4 py-3 rounded-xl transition-all duration-300 text-gray-700 hover:bg-gray-50 hover:shadow-md cursor-pointer ${isOpen && 'shadow-lg '}
-                                    `}
-                            >
-                                <span className="flex items-center gap-3">
-                                    <div className={`p-2 rounded-lg ${isOpen ? "bg-white/20" : "bg-gray-100 group-hover:bg-main/10"}`}>
-                                        <Icon className={`w-4 h-4 ${item.color}`} />
-                                    </div>
-                                    <span className="font-medium">{item.label}</span>
-                                </span>
-                                <FiChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-180" : "text-gray-400"}`} />
-                            </button>
-
-                            {/* Submenu with enhanced design */}
-                            {isOpen && (
-                                <div className="ml-6 mt-2 space-y-1 border-l-2 border-main/20 pl-4 py-2">
-                                    {item.children.map((sub) => {
-                                        const SubIcon = sub.icon;
-                                        const active = pathname === sub.href;
-
-                                        return (
-                                            <Link
-                                                key={sub.href}
-                                                href={sub.href}
-                                                {...(isMobile && {
-                                                    onClick: () => setMobileOpen(false),
-                                                })}
-                                                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group ${active
-                                                    ? "bg-gradient-to-r from-main to-cyan-500 text-white shadow-md transform scale-105"
-                                                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm hover:translate-x-1"
-                                                    }`}
-                                            >
-                                                <div className={`p-1.5 rounded-md ${active ? "bg-white/20" : "bg-gray-100 group-hover:bg-main/10"}`}>
-                                                    <SubIcon className={`w-3.5 h-3.5 ${active ? "text-white" : sub.color}`} />
-                                                </div>
-                                                <span className="text-sm font-medium">{sub.label}</span>
-                                                {active && (
-                                                    <FiChevronRight className="w-3 h-3 ml-auto text-white/80" />
-                                                )}
-                                            </Link>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                    );
-                }
-
                 const active = pathname === item.href;
 
                 return (

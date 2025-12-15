@@ -16,7 +16,6 @@ export default function AddCategoryForm() {
     const data = await res.json();
 
     setCategories(Array.isArray(data) ? data : data.categories || []);
-
   };
 
   useEffect(() => {

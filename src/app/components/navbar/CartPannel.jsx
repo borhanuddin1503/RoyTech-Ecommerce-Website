@@ -43,9 +43,9 @@ export default function CartPannel() {
             </button>
 
 
-            {showCartPannel && <div className="fixed inset-0" onClick={() => setShowCartPannel(false)}></div>}
+            {showCartPannel && <div className="fixed inset-0 bg-transparent backdrop-blur-xs" onClick={() => setShowCartPannel(false)}></div>}
             <div
-                className={`fixed top-0 right-0 h-full w-100 bg-white shadow-2xl z-50 transform transition-transform duration-300 py-6 px-5 flex flex-col ${showCartPannel ? "translate-x-0" : "translate-x-full"
+                className={`fixed top-0 right-0 h-full md:w-100 w-90 bg-white shadow-2xl z-50 transform transition-transform duration-300 py-6 px-5 flex flex-col ${showCartPannel ? "translate-x-0" : "translate-x-full"
                     }`}
             >
                 {/* Header */}

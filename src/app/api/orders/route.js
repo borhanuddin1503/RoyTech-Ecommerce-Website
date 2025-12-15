@@ -166,14 +166,24 @@ export async function GET(req) {
     };
 
 
-   const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
     const visitorsId = cookie.value;
     console.log('visitorId', visitorsId)
 
-    const query = {};
-    if(email && session?.user?.email === email){
+    const query = {
+      $or: [
+        {
+          paymentMethod: "online",
+          paymentStatus: "paid",
+        },
+        {
+          paymentMethod: "cod",
+        }
+      ]
+    };
+    if (email && session?.user?.email === email) {
       query.email = email
-    }else{
+    } else {
       query.visitorsId = visitorsId
     }
 
@@ -181,6 +191,7 @@ export async function GET(req) {
 
     const result = await ordersCollection
       .find(query)
+      .sort({ orderedAt: -1 })
       .toArray();
 
     return NextResponse.json({

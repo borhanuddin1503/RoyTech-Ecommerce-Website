@@ -47,7 +47,7 @@ export async function POST(req) {
                     paymentStatus: "paid",
                     transactionId: res.tran_id,
                     validationId: res.val_id,
-                    updatedAt: validate.tran_date,
+                    paidAt: validate.tran_date,
                     'paid_amount': validate.amount,
                     card_issuer: validate.card_issuer,
                 },

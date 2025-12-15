@@ -21,17 +21,17 @@ const Navbar = ({ serverSession }) => {
     const navRef = useRef();
 
     const pathname = usePathname();
-    
-    
+
+
     const session = clientSession || serverSession;
 
     // Primary color - Vibrant gradient from teal to purple
     const primaryGradient = "bg-gradient-to-r from-main to-purple-600";
 
-    if(session?.user?.role === 'admin'){
+    if (session?.user?.role === 'admin') {
         navItems.push({ label: 'Dashboard', link: '/admin-dashboard' })
     }
-    if(session?.user?.role === 'user'){
+    if (session?.user?.role === 'user') {
         navItems.push({ label: 'Dashboard', link: '/user-dashboard' })
     }
 
@@ -46,7 +46,7 @@ const Navbar = ({ serverSession }) => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [])
 
-    if(pathname.includes('dashboard')){
+    if (pathname.includes('dashboard')) {
         return;
     }
 
@@ -109,12 +109,12 @@ const Navbar = ({ serverSession }) => {
                         <div className="hidden lg:flex">
                             <SearchBox />
                         </div>
+                        <CartPannel></CartPannel>
 
                         {/* Auth & Cart Section */}
                         <div className="flex items-center gap-3">
                             {session ? (
                                 <div className="flex items-center gap-4">
-                                    <CartPannel></CartPannel>
                                     {/* User Popup */}
                                     <Popup user={session.user} />
                                 </div>
@@ -139,7 +139,7 @@ const Navbar = ({ serverSession }) => {
                 )}
 
                 {/* Mobile Navigation */}
-                <MobileNav isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} session= {session}/>
+                <MobileNav isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} session={session} />
             </div>
         </nav>
     );

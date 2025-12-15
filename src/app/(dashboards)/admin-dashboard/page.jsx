@@ -31,6 +31,7 @@ import {
 import StatusBadge from './orders/StatusBadge';
 import { PaymentBadge } from './orders/page';
 import Link from 'next/link';
+import DashHomeSkeleton from './components/DashHomeSkeleton';
 
 
 
@@ -92,10 +93,6 @@ const DashboardHome = () => {
 
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  // const monthlyData = data?.yearlyMonthlyStats.map((order) => ({
-  //   ...order,
-  //   month : months[order.month-1]
-  // }))
 
   const monthlyData = months.map((m, i) => {
     const ordderInTheMonth = data?.yearlyMonthlyStats.find((o) => o.month - 1 === i);
@@ -109,7 +106,7 @@ const DashboardHome = () => {
   console.log(monthlyData)
 
   if (isLoading) {
-    return <p>Loading....</p>
+    return <DashHomeSkeleton></DashHomeSkeleton>
   }
 
   console.log(data)
@@ -156,7 +153,10 @@ const DashboardHome = () => {
                 <span>Today</span>
               </div>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+
+
+            {/* bar row */}
+            <ResponsiveContainer width="100%" height={400}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="time"
@@ -181,23 +181,25 @@ const DashboardHome = () => {
           </div>
 
           {/* Recent Orders */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 max-h-150 overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold text-gray-900">Todays Orders</h3>
               <FiPackage className="w-5 h-5 text-gray-500" />
             </div>
             <div className="space-y-4">
               {data.recentOrders.map((order, index) => (
-                <div key={index} className="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-main transition-colors duration-200">
-                  <div>
-                    <p className="font-semibold text-gray-900">{order?._id.slice(-6)}</p>
-                    <p className="text-sm text-gray-500">{order?.customer?.name}</p>
+                <Link href={'/admin-dashboard/orders'} key={index}>
+                  <div  className="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-main transition-colors duration-200">
+                    <div>
+                      <p className="font-semibold text-gray-900">{order?._id.slice(-8)}</p>
+                      <p className="text-sm text-gray-500">{order?.customer?.name}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-gray-900">{order.amount}</p>
+                      <StatusBadge status={order.orderStatus}></StatusBadge>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold text-gray-900">{order.amount}</p>
-                    <StatusBadge status={order.orderStatus}></StatusBadge>
-                  </div>
-                </div>
+                </Link>
               ))}
             </div>
             <Link href={'/admin-dashboard/orders'}><button className="cursor-pointer w-full mt-6 py-3 border-2 border-main text-main rounded-xl font-semibold hover:bg-main hover:text-white transition-all duration-300">

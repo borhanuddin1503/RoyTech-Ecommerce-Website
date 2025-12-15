@@ -72,8 +72,8 @@ export async function GET() {
             },
             {
                 $group: {
-                    _id : null,
-                    total : {$sum: '$amount'}
+                    _id: null,
+                    total: { $sum: '$amount' }
                 }
             }
         ]).toArray();
@@ -89,22 +89,48 @@ export async function GET() {
 
         //  RECENT ORDERS
 
-        const recentOrders = await ordersCollection
-            .find({
-                orderedAt: {
-                    $gte: start.toISOString(),
-                    $lte: end.toISOString(),
+        const recentOrders = await ordersCollection.aggregate([
+            {
+                $match: {
+                    orderedAt: {
+                        $gte: start.toISOString(),
+                        $lte: end.toISOString(),
+                    },
+                    $or: [
+                        {
+                            paymentMethod: "online",
+                            paymentStatus: "paid",
+                        },
+                        {
+                            paymentMethod: "cod",
+                        }
+                    ],
+
                 }
-            })
-            .sort({ orderedAt: -1 })
-            .project({
-                amount: 1,
-                orderedAt: 1,
-                orderStatus: 1,
-                paymentMethod: 1,
-                customer: 1,
-            })
-            .toArray();
+            }
+        ]).toArray()
+
+
+
+
+
+
+
+        // .find({
+        //     orderedAt: {
+        //         $gte: start.toISOString(),
+        //         $lte: end.toISOString(),
+        //     },
+        // })
+        // .sort({ orderedAt: -1 })
+        // .project({
+        //     amount: 1,
+        //     orderedAt: 1,
+        //     orderStatus: 1,
+        //     paymentMethod: 1,
+        //     customer: 1,
+        // })
+        // .toArray();
 
 
 
@@ -127,6 +153,7 @@ export async function GET() {
                         $gte: startOfYear.toISOString(),
                         $lte: endOfYear.toISOString(),
                     },
+                    orderStatus: 'delivered'
                 },
             },
             {
