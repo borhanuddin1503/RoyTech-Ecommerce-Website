@@ -5,6 +5,7 @@ import { FiTag, FiPackage, FiPercent, FiDollarSign, FiImage, FiPlus } from "reac
 import Swal from "sweetalert2";
 import imageCompression from "browser-image-compression";
 import ColorPickerTags from "./ColorPicker";
+import { BiAddToQueue } from "react-icons/bi";
 
 
 export default function AddProduct() {
@@ -18,7 +19,7 @@ export default function AddProduct() {
     const [discount, setDiscount] = useState(0);
     const [discountedPrice, setDiscountedPrice] = useState(0);
     const [regularPrice, setRegularPrice] = useState(0);
-    const [availableColors , setAvailableColors] = useState([]);
+    const [availableColors, setAvailableColors] = useState([]);
 
 
 
@@ -81,7 +82,7 @@ export default function AddProduct() {
             }
         }
 
-        setPhotos(uploadedPhotos);
+        setPhotos([...photos, ...uploadedPhotos]);
         setLoading(false);
     };
 
@@ -161,12 +162,19 @@ export default function AddProduct() {
 
     };
 
+    console.log(photos)
+
     return (
         <section className="max-w-4xl mx-auto  py-8">
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">Add New Product</h2>
-                    <p className="text-gray-600">Add a new product to your store</p>
+                <div className=" mb-8 flex gap-5">
+                    <div className="text-4xl text-main">
+                        <BiAddToQueue />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-bold text-main"> Add New Product</h2>
+                        <p className="text-gray-500 text-sm">Add a new product to your store</p>
+                    </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -269,15 +277,12 @@ export default function AddProduct() {
                     <div className="md:col-span-1">
                         <label className="block text-sm font-semibold mb-2">Available Colors</label>
                         <ColorPickerTags onChange={setAvailableColors} availableColors={availableColors}></ColorPickerTags>
-                        <p className="text-xs text-gray-500 mt-1">Press , after type</p>
                     </div>
 
 
                     {/* images */}
                     <div className="md:col-span-2">
-                        <label className="font-medium">Category Image *</label>
-
-                        {photos.length > 0 ? (<div className="flex flex-wrap gap-5">
+                        {photos.length > 0 && (<div className="flex flex-wrap gap-5">
                             {
                                 photos.map((photo, i) =>
                                     <div className="mt-2 relative w-32 h-32" key={i}>
@@ -294,20 +299,20 @@ export default function AddProduct() {
                                         </button>
                                     </div>)
                             }
+                        </div>)}
+                        <div className="p-3 border rounded-xl mt-2">
+                            <label className="font-medium">Category Image *</label>
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="cursor-pointer w-full"
+                                onChange={(e) => uploadImage(e.target.files)}
+                                multiple
+                                required
+                            />
+                            {loading && <p className="text-main text-sm mt-2">Uploading...</p>}
                         </div>
-                        ) : (
-                            <div className="p-3 border rounded-xl mt-2">
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="cursor-pointer w-full"
-                                    onChange={(e) => uploadImage(e.target.files)}
-                                    multiple
-                                    required
-                                />
-                                {loading && <p className="text-main text-sm mt-2">Uploading...</p>}
-                            </div>
-                        )}
                     </div>
 
 

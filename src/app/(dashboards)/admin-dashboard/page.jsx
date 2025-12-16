@@ -32,6 +32,46 @@ import StatusBadge from './orders/StatusBadge';
 import { PaymentBadge } from './orders/page';
 import Link from 'next/link';
 import DashHomeSkeleton from './components/DashHomeSkeleton';
+import { TbNoteOff } from "react-icons/tb";
+import { LuLayoutDashboard } from 'react-icons/lu';
+
+
+
+const getPath = (x, y, width, height) => {
+  return `
+    M${x},${y + height}
+    L${x + width / 2},${y}
+    L${x + width},${y + height}
+    Z
+  `;
+};
+
+const TriangleBar = ({ fill, x, y, width, height }) => {
+  console.log({ fill, x, y, width, height });
+  return (
+    <path
+      d={getPath(x, y, width, height)}
+      stroke="none"
+      fill={fill}
+    />
+  );
+};
+
+
+const colors = [
+  '#06b6d4',
+  '#8b5cf6',
+  '#22c55e',
+  '#f97316',
+  '#ef4444',
+  '#14b8a6',
+  '#6366f1',
+  '#ec4899',
+  '#84cc16',
+  '#0ea5e9',
+  '#a855f7',
+  '#f59e0b'
+];
 
 
 
@@ -116,9 +156,14 @@ const DashboardHome = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-          <p className="text-gray-600 mt-2">Welcome back! Here's what's happening with your store today.</p>
+        <div className="mb-8 flex gap-4">
+          <div>
+            <LuLayoutDashboard className='text-4xl text-main'/>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-main">Dashboard Overview</h1>
+            <p className="text-gray-600 text-sm ">Welcome back! Here's what's happening with your store today.</p>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -181,27 +226,34 @@ const DashboardHome = () => {
           </div>
 
           {/* Recent Orders */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 max-h-150 overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 max-h-150 overflow-y-auto flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold text-gray-900">Todays Orders</h3>
               <FiPackage className="w-5 h-5 text-gray-500" />
             </div>
-            <div className="space-y-4">
-              {data.recentOrders.map((order, index) => (
-                <Link href={'/admin-dashboard/orders'} key={index}>
-                  <div  className="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-main transition-colors duration-200">
-                    <div>
-                      <p className="font-semibold text-gray-900">{order?._id.slice(-8)}</p>
-                      <p className="text-sm text-gray-500">{order?.customer?.name}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-gray-900">{order.amount}</p>
-                      <StatusBadge status={order.orderStatus}></StatusBadge>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            {
+              data.recentOrders.length > 0 ?
+                <div className="space-y-4">
+                  {data.recentOrders.map((order, index) => (
+                    <Link href={'/admin-dashboard/orders'} key={index}>
+                      <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-main transition-colors duration-200">
+                        <div>
+                          <p className="font-semibold text-gray-900">{order?._id.slice(-8)}</p>
+                          <p className="text-sm text-gray-500">{order?.customer?.name}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-gray-900">{order.amount}</p>
+                          <StatusBadge status={order.orderStatus}></StatusBadge>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div> :
+                <div className='h-full flex flex-col items-center justify-center'>
+                  <TbNoteOff className='h-12 w-12 text-main' />
+                  <h2>No orders Today</h2>
+                </div>
+            }
             <Link href={'/admin-dashboard/orders'}><button className="cursor-pointer w-full mt-6 py-3 border-2 border-main text-main rounded-xl font-semibold hover:bg-main hover:text-white transition-all duration-300">
               View All Orders
             </button></Link>
@@ -210,12 +262,12 @@ const DashboardHome = () => {
 
         {/* Monthly Performance & Recent Orders */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Monthly Performance Chart */}
-          <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+          {/* Monthly revenue Chart */}
+          <div className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-lg font-bold text-gray-900">Monthly Performance</h3>
-                <p className="text-gray-600 text-sm">Revenue and orders over the year</p>
+                <h3 className="text-lg font-bold text-gray-900">Monthly Orders</h3>
+                <p className="text-gray-600 text-sm"> orders over the year</p>
               </div>
             </div>
             <ResponsiveContainer width="100%" height={350}>
@@ -233,47 +285,101 @@ const DashboardHome = () => {
                 <Legend />
                 <Line
                   type="monotone"
-                  dataKey="revenue"
+                  dataKey="orders"
                   name="Revenue (৳)"
                   stroke="#06b6d4"
                   strokeWidth={3}
                   dot={{ r: 4 }}
                   activeDot={{ r: 6 }}
                 />
-                <Line
-                  type="monotone"
-                  dataKey="orders"
-                  name="Orders"
-                  stroke="#8b5cf6"
-                  strokeWidth={3}
-                  dot={{ r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
+
               </LineChart>
             </ResponsiveContainer>
           </div>
 
 
+
+          {/* monthly orders chart */}
+          <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900">Monthly Revenue</h3>
+                <p className="text-gray-600 text-sm">revenue over the year</p>
+              </div>
+            </div>
+
+
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" stroke='#6b7280' />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+
+                <Bar
+                  dataKey="revenue"
+                  name="revenue"
+                  fill='#06b6d4'
+                  shape={<TriangleBar />}
+                  label={{ position: 'top' }}
+                >
+                  {monthlyData.map((_entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={colors[index % colors.length]}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+
+          </div>
+
         </div>
 
-        {/* Quick Stats */}
-        <div className="mt-8 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-r from-main to-cyan-500 rounded-2xl p-6 text-white">
-            <h4 className="text-lg font-semibold mb-2">Total Revenue</h4>
-            <p className="text-3xl font-bold">৳824,500</p>
-            <p className="text-sm opacity-90 mt-2">+24% from last month</p>
+        {data.totalOrdersSummary && data.totalOrdersSummary.map((s, i) =>
+          <div
+            key={i}
+            className="mt-8 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+
+            {/* Total Revenue */}
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition space-y-2">
+              <div className="p-4 rounded-xl bg-blue-500 inline-flex">
+                <FiDollarSign className="text-white text-2xl" />
+              </div>
+              <h4 className="text-gray-600 text-sm font-medium">Total Revenue</h4>
+              <p className="text-3xl font-bold text-gray-900">{s.revenue}</p>
+            </div>
+
+            {/* Total Orders */}
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition space-y-2">
+              <div className="p-4 rounded-xl bg-green-500 inline-flex">
+                <FiShoppingCart className="text-white text-2xl" />
+              </div>
+              <h4 className="text-gray-600 text-sm font-medium">Total Orders</h4>
+              <p className="text-3xl font-bold text-gray-900">{s.orders}</p>
+            </div>
+
+            {/* Average Order Value */}
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition space-y-2 col-span-2 md:col-span-1">
+              <div className="p-4 rounded-xl bg-purple-500 inline-flex">
+                <FiTrendingUp className="text-white text-2xl" />
+              </div>
+              <h4 className="text-gray-600 text-sm font-medium">
+                Average Order Value
+              </h4>
+              <p className="text-3xl font-bold text-gray-900">
+                {(s.revenue / s.orders).toFixed(2)}
+              </p>
+            </div>
+
           </div>
-          <div className="bg-gradient-to-r from-purple-600 to-pink-500 rounded-2xl p-6 text-white">
-            <h4 className="text-lg font-semibold mb-2">Total Orders</h4>
-            <p className="text-3xl font-bold">5,280</p>
-            <p className="text-sm opacity-90 mt-2">+18% from last month</p>
-          </div>
-          <div className="bg-gradient-to-r col-span-2 md:col-span-1 from-green-500 to-emerald-600 rounded-2xl p-6 text-white">
-            <h4 className="text-lg font-semibold mb-2">Average Order Value</h4>
-            <p className="text-3xl font-bold">৳1,560</p>
-            <p className="text-sm opacity-90 mt-2">+5% from last month</p>
-          </div>
-        </div>
+        )}
+
+
+
       </div>
     </div>
   );

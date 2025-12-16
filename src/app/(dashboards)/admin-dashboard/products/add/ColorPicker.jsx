@@ -31,7 +31,7 @@ export default function ColorPickerTags({ onChange, availableColors }) {
                         onChange={(e) => setWrittenValue(e.target.value)}
                     />
 
-                    <button type="button" className="text-sm border-gray-500 bg-gray-500 cursor-pointer py-3 px-4  text-white rounded-r-sm"
+                    <button type="button" className="text-sm border-gray-500 bg-main cursor-pointer py-3 px-4  text-white rounded-r-sm"
                         onClick={() => {
                             addColor(writtenValue)
                         }}

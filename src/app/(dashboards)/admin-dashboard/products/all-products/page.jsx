@@ -6,6 +6,7 @@ import ProductsLoading from "./productsLoading";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { LuNotebookPen } from "react-icons/lu";
 
 export default function AllProducts() {
   const [page, setPage] = useState(1);
@@ -26,8 +27,8 @@ export default function AllProducts() {
 
 
 
-  const {data, isLoading , refetch} = useQuery({
-    queryKey: ['products' , page],
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['products', page],
     queryFn: () => fetchProducts(page),
     staleTime: 1000 * 60 * 20,
   })
@@ -72,7 +73,10 @@ export default function AllProducts() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-semibold mb-6">All Products</h1>
+      <div className="flex gap-4 items-center mb-6">
+        <LuNotebookPen className="text-2xl text-main"/>
+        <h1 className="text-2xl text-main font-semibold">All Products</h1>
+      </div>
 
       <div className="rounded-2xl shadow-md overflow-hidden bg-white">
         <div className="overflow-x-auto">

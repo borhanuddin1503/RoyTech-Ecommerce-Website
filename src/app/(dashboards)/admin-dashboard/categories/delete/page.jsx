@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { BiCategoryAlt } from "react-icons/bi";
 import {
     FiTrash2,
     FiAlertTriangle,
@@ -20,14 +21,14 @@ export default function DeleteCategory() {
     // Fetch Categories
     // -------------------------------
     const fetchCategories = async () => {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/categories`
-            );
-            const data = await res.json();
-            return data;
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/categories`
+        );
+        const data = await res.json();
+        return data;
     };
 
-    const {data:categories=[] , isLoading , refetch} = useQuery({
+    const { data: categories = [], isLoading, refetch } = useQuery({
         queryKey: ['categories'],
         queryFn: () => fetchCategories(),
         staleTime: 1000 * 60 * 20,
@@ -147,7 +148,7 @@ export default function DeleteCategory() {
                 <div className="flex items-center gap-3">
                     <button
                         type="button"
-                        onClick={() =>{
+                        onClick={() => {
                             setOpenCategory(
                                 openCategory === cat._id ? null : cat._id
                             )
@@ -273,13 +274,18 @@ export default function DeleteCategory() {
     // -------------------------------
     return (
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                    Manage Categories
-                </h2>
-                <p className="text-gray-600">
-                    Delete unwanted categories & subcategories
-                </p>
+            <div className=" mb-8 flex gap-5 ">
+                <div className="text-4xl text-main">
+                    <BiCategoryAlt />
+                </div>
+                <div>
+                    <h2 className="text-xl font-bold text-main ">
+                        Manage Categories
+                    </h2>
+                    <p className="text-gray-500 text-sm">
+                        Delete unwanted categories & subcategories
+                    </p>
+                </div>
             </div>
 
             {isLoading ? (

@@ -70,7 +70,7 @@ export default function ProductsPage() {
                                 Filters
                             </h3>
 
-                            <p className="text-gray-500 font-bold" onClick={() => setShowFilterOption(false)}>x</p>
+                            <p className="text-gray-500 font-bold md:hidden" onClick={() => setShowFilterOption(false)}>x</p>
                         </div>
 
                         {/* Category Filter */}

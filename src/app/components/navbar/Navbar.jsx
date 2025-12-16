@@ -85,10 +85,10 @@ const Navbar = ({ serverSession }) => {
                                 <li key={item.label} className="relative group">
                                     <Link
                                         href={item.link}
-                                        className={`text-gray-700 hover:text-main transition-colors duration-200 font-semibold py-2 px-1 relative`}
+                                        className={`text-gray-700 hover:text-main transition-colors duration-200 font-semibold py-2 px-1 relative ${pathname === item.link && 'text-main'}`}
                                     >
                                         {item.label}
-                                        <span className={`absolute bottom-0 left-0 w-0 h-0.5 ${primaryGradient} transition-all duration-300 group-hover:w-full`}></span>
+                                        <span className={`absolute bottom-0 left-0 w-0 h-0.5 ${primaryGradient} transition-all duration-300 group-hover:w-full ${pathname === item.link && 'w-full'}`}></span>
                                     </Link>
                                 </li>
                             ))}

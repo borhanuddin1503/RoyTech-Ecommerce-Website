@@ -60,6 +60,8 @@ export async function GET() {
             },
         ]).toArray();
 
+
+        // cash on delivery revenue
         const codRevenue = await ordersCollection.aggregate([
             {
                 $match: {
@@ -88,7 +90,6 @@ export async function GET() {
 
 
         //  RECENT ORDERS
-
         const recentOrders = await ordersCollection.aggregate([
             {
                 $match: {
@@ -113,25 +114,21 @@ export async function GET() {
 
 
 
-
-
-
-        // .find({
-        //     orderedAt: {
-        //         $gte: start.toISOString(),
-        //         $lte: end.toISOString(),
-        //     },
-        // })
-        // .sort({ orderedAt: -1 })
-        // .project({
-        //     amount: 1,
-        //     orderedAt: 1,
-        //     orderStatus: 1,
-        //     paymentMethod: 1,
-        //     customer: 1,
-        // })
-        // .toArray();
-
+        // total orders
+        const totalOrdersSummary = await ordersCollection.aggregate([
+            {
+                $match: {
+                    orderStatus: 'delivered'
+                }
+            },
+            {
+                $group:{
+                    _id: null,
+                    revenue : {$sum : "$amount"},
+                    orders : {$sum : 1}
+                }
+            },
+        ]).toArray();
 
 
         // last years orders
@@ -193,7 +190,8 @@ export async function GET() {
             recentOrders,
             totalCategories,
             yearlyMonthlyStats,
-            todayCodRevenue
+            todayCodRevenue,
+            totalOrdersSummary
         });
     } catch (error) {
         console.error("Admin dashboard error:", error);
