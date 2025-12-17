@@ -23,7 +23,7 @@ export default function AddCategoryForm() {
   }, []);
 
   return (
-    <div className="max-w-3xl mx-auto ">
+    <div className="max-w-4xl mx-auto ">
       <div className="bg-white rounded-2xl shadow-lg border p-6">
 
         {/* Header */}

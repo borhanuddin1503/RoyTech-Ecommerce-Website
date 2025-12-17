@@ -38,6 +38,9 @@ export default function CheckoutSummary({ items, total }) {
             body: JSON.stringify(finalData)
         })
         const result = await res.json();
+
+        console.log('result from checkout form' , result);
+
         if (result.success) {
             if (result.redirect_url) {
                 return redirect(result.redirect_url)

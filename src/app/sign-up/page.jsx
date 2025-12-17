@@ -6,12 +6,18 @@ import { FiUser, FiPhone, FiMapPin, FiMail, FiLock, FiArrowRight } from 'react-i
 import SocialLogin from '../login/SocialLogin';
 import register from '../actions/auth/register';
 import { useRouter } from 'next/navigation';
+import imageCompression from "browser-image-compression";
+import Swal from 'sweetalert2';
+import Image from 'next/image';
+
 
 export default function SignUpPage() {
   const [showPass, setShowPass] = useState(false);
   const [PassValid, setPassValid] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [photo, setPhoto] = useState('');
   const router = useRouter();
+  const [photoLoading, setPhotoLoading] = useState(false);
 
   // Primary color configuration
   const primaryColor = '#06b6d4';
@@ -27,10 +33,58 @@ export default function SignUpPage() {
     }
   };
 
+
+  // upload images
+  const uploadImage = async (file) => {
+    try {
+      setPhotoLoading(true)
+      if (!file) return;
+
+      const options = {
+        maxSizeMB: 0.4,
+        maxWidthOrHeight: 1000,
+        useWebWorker: true,
+      };
+
+      console.log(file)
+
+      const compressedImage = await imageCompression(file, options);
+
+      // formdata
+      const formData = new FormData();
+      formData.append("image", compressedImage);
+
+
+      // upload image and convert into webp
+      const res = await fetch("/api/upload-webp-imgbb", {
+        method: "POST",
+        body: formData
+      });
+      const result = await res.json();
+      if (result.success) {
+        return setPhoto(result.url)
+      }
+
+      return Swal.fire('Error', result.message, 'error')
+    }
+    finally {
+      setPhotoLoading(false)
+    }
+  }
+
+
+  // delete photos
+  const handleDeletePhoto = () => {
+    setPhoto('')
+  }
+
   // handle form submit
   const handleRegister = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    if (!photo) return;
+
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
@@ -41,21 +95,22 @@ export default function SignUpPage() {
     }
 
     // save in database
-    const isRegister = await register(data);
+    const isRegister = await register({ ...data, image: photo });
     if (isRegister.isSuccess) {
-      alert(isRegister.message);
+      Swal.fire('Success', isRegister.message, 'success');
       router.push('/login');
     } else {
-      alert(isRegister.message);
+      Swal.fire('Error', isRegister.message, 'error');
     }
     setIsLoading(false);
+    setPhoto('')
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       {/* Main Card */}
       <div className="bg-white w-full max-w-4xl rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        
+
         {/* Header */}
         <div className='bg-[#06b6d4] py-8 text-white text-center'>
           <div className="relative z-10">
@@ -144,6 +199,42 @@ export default function SignUpPage() {
             </div>
           </div>
 
+          {/* photo */}
+          <div className="col-span-2 space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Photo *
+            </label>
+            {photo ?
+              <div className="mt-2 relative w-32 h-32" >
+                <img
+                  src={photo}
+                  className="rounded-xl border w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleDeletePhoto()}
+                  className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-8 h-8"
+                >
+                  ×
+                </button>
+              </div> :
+              <div className='flex gap-2 border  border-gray-300 py-3 px-3 w-full borderrounded-lg focus:ring-2 focus:ring-[#06b6d4] focus:border-[#06b6d4] transition-all duration-200  rounded-lg'>
+                <div className="">
+                  <FiUser className="h-5 w-5 text-main" />
+                </div>
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => uploadImage(e.target?.files[0])}
+                    required
+                    className="outline-none cursor-pointer"
+                  />
+                  {photoLoading && <p className="text-main text-sm mt-2">Uploading...</p>}
+                </div>
+              </div>}
+          </div>
+
           {/* Full Address - Spanning 2 columns */}
           <div className="col-span-2 space-y-2">
             <label className="block text-sm font-medium text-gray-700">
@@ -221,8 +312,8 @@ export default function SignUpPage() {
                 onClick={() => setShowPass(!showPass)}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer transition-all duration-200"
               >
-                {showPass ? 
-                  <LuEye className="h-5 w-5 text-gray-500" /> : 
+                {showPass ?
+                  <LuEye className="h-5 w-5 text-gray-500" /> :
                   <LuEyeClosed className="h-5 w-5 text-gray-500" />
                 }
               </div>
@@ -246,13 +337,13 @@ export default function SignUpPage() {
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 ) : (
                   <>
-                    Create Account 
+                    Create Account
                     <FiArrowRight className="ml-2" />
                   </>
                 )}
               </span>
             </button>
-            
+
             <div className="relative flex items-center py-2">
               <div className="flex-grow border-t border-gray-300"></div>
               <span className="flex-shrink mx-4 text-gray-500 text-sm">or sign up with</span>
@@ -270,8 +361,8 @@ export default function SignUpPage() {
         <div className='bg-gray-50 py-5 text-center border-t border-gray-200'>
           <span className='text-gray-600 text-sm'>
             Already have an account?{' '}
-            <Link 
-              href="/login" 
+            <Link
+              href="/login"
               className="font-semibold text-main hover:text-[#0891b2] transition-colors duration-200"
             >
               Login

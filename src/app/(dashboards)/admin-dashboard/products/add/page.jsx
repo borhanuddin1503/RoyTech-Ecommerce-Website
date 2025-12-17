@@ -300,8 +300,8 @@ export default function AddProduct() {
                                     </div>)
                             }
                         </div>)}
+                        <label className="block text-sm font-semibold mb-2">Category Image *</label>
                         <div className="p-3 border rounded-xl mt-2">
-                            <label className="font-medium">Category Image *</label>
 
                             <input
                                 type="file"

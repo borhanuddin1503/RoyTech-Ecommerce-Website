@@ -54,7 +54,31 @@ export async function POST(req) {
             }
         );
 
-        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/my-orders?msg=Payment%20Successfull`)
+        // return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/my-orders?msg=Payment%20Successfull`);
+
+        return new Response(
+            `
+            <!DOCTYPE html>
+            <html>
+                <head>
+                <meta charset="UTF-8" />
+                <title>Payment Successful</title>
+                <script>
+                    window.location.href = "${process.env.NEXT_PUBLIC_BASE_URL}/my-orders?msg=Payment%20Successfull";
+                </script>
+                </head>
+                <body>
+                <p>Payment successful. Redirecting...</p>
+                </body>
+            </html>
+            `,
+            {
+                headers: {
+                    "Content-Type": "text/html",
+                },
+            }
+        );
+
     } catch (error) {
         console.log(error);
         return NextResponse.json(

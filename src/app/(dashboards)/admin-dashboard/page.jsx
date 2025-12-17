@@ -158,7 +158,7 @@ const DashboardHome = () => {
         {/* Header */}
         <div className="mb-8 flex gap-4">
           <div>
-            <LuLayoutDashboard className='text-4xl text-main'/>
+            <LuLayoutDashboard className='text-4xl text-main' />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-main">Dashboard Overview</h1>
@@ -235,18 +235,20 @@ const DashboardHome = () => {
               data.recentOrders.length > 0 ?
                 <div className="space-y-4">
                   {data.recentOrders.map((order, index) => (
-                    <Link href={'/admin-dashboard/orders'} key={index}>
-                      <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-main transition-colors duration-200">
-                        <div>
-                          <p className="font-semibold text-gray-900">{order?._id.slice(-8)}</p>
-                          <p className="text-sm text-gray-500">{order?.customer?.name}</p>
+                    <div key={index}>
+                      <Link href={'/admin-dashboard/orders'}>
+                        <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-main transition-colors duration-200">
+                          <div>
+                            <p className="font-semibold text-gray-900">{order?._id.slice(-8)}</p>
+                            <p className="text-sm text-gray-500">{order?.customer?.name}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-gray-900">{order.amount}</p>
+                            <StatusBadge status={order.orderStatus}></StatusBadge>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <p className="font-bold text-gray-900">{order.amount}</p>
-                          <StatusBadge status={order.orderStatus}></StatusBadge>
-                        </div>
-                      </div>
-                    </Link>
+                      </Link>
+                    </div>
                   ))}
                 </div> :
                 <div className='h-full flex flex-col items-center justify-center'>
