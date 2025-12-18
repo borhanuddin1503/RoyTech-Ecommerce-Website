@@ -14,9 +14,6 @@ export default function MobileNav({ isMenuOpen, setIsMenuOpen, session }) {
     if (session?.user?.role === 'admin') {
         navItems.push({ label: 'Dashboard', link: '/admin-dashboard' })
     }
-    if (session?.user?.role === 'user') {
-        navItems.push({ label: 'Dashboard', link: '/user-dashboard' })
-    }
     return (
         <div>
             {isMenuOpen && 

@@ -6,7 +6,7 @@ export default function getNavLinks() {
         { label: 'Home', link: '/' },
         { label: 'Products', link: '/products' },
         { label: 'My Orders', link: '/my-orders' },
-        { label: 'Plant Clinic', link: '/plant-clinic' },
+        { label: 'Categories', link: '/categories' },
     ]
 
     return (navItems); 

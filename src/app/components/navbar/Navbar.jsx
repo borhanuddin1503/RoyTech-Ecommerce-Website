@@ -31,9 +31,6 @@ const Navbar = ({ serverSession }) => {
     if (session?.user?.role === 'admin') {
         navItems.push({ label: 'Dashboard', link: '/admin-dashboard' })
     }
-    if (session?.user?.role === 'user') {
-        navItems.push({ label: 'Dashboard', link: '/user-dashboard' })
-    }
 
     // detect outside click of navbar
     useEffect(() => {

@@ -7,6 +7,8 @@ import FeaturedProducts from "./components/home/featured-products/FeaturedProduc
 import FeaturedProductsSkeleton from "./components/home/featured-products/FeaturedProductsSkeleton";
 import BestSales from "./components/home/best-selling-products/BestSellingProducts";
 import NewArrivals from "./components/home/new-arrivals/NewArrivals";
+import WhyChooseUs from "./components/home/whyChooseUs/WhyChooseUs";
+import ContactUs from "./components/home/contact-us/ContactUs";
 
 export const metadata = {
   title: 'Roy Tech World',
@@ -21,6 +23,8 @@ export default function Home() {
         <Suspense fallback={<FeaturedProductsSkeleton/>}><FeaturedProducts></FeaturedProducts></Suspense>
         <Suspense fallback={<FeaturedProductsSkeleton/>}><BestSales></BestSales></Suspense>
         <Suspense fallback={<FeaturedProductsSkeleton/>}><NewArrivals></NewArrivals></Suspense>
+        <Suspense fallback={<FeaturedProductsSkeleton/>}><WhyChooseUs/></Suspense>
+        <Suspense fallback={<FeaturedProductsSkeleton/>}><ContactUs></ContactUs></Suspense>
       </div>
   );
 }

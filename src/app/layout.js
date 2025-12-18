@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import Footer from "./components/footer/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +44,7 @@ export default async function RootLayout({ children }) {
           <NextAuthProvider>
             <Navbar serverSession={session}></Navbar>
             {children}
+            <Footer></Footer>
           </NextAuthProvider>
         </ReactQueryProvider>
       </body>

@@ -9,6 +9,7 @@ import FeaturedProductsSkeleton from "../components/home/featured-products/Featu
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { CiFilter } from "react-icons/ci";
+import { AiOutlineProduct } from "react-icons/ai";
 
 export default function ProductsPage() {
     const [page, setPage] = useState(1);
@@ -22,6 +23,13 @@ export default function ProductsPage() {
 
     const searchParams = useSearchParams();
     const search = searchParams.get('search');
+    const queryCategory = searchParams.get('category');
+
+    useEffect(() => {
+        if(queryCategory){
+            setCategory(queryCategory)
+        }
+    } , [])
 
     const { data: categories } = useCategoriesQuery();
     const { data, isLoading } = useProductsQuery({
@@ -52,7 +60,7 @@ export default function ProductsPage() {
 
     return (
         <div className="bg-white">
-            <div className="px-5 py-8 max-w-7xl mx-auto">
+            <div className="px-5 py-4 max-w-7xl mx-auto">
 
                 {/* button */}
                 <button className={`flex gap-2 items-center font-semibold py-3 px-6 bg-main rounded-lg mb-5 text-white md:hidden ${showFilterOption && 'hidden'}`} onClick={() => setShowFilterOption(!showFilterOption)}><CiFilter /> Filter</button>
@@ -60,7 +68,7 @@ export default function ProductsPage() {
 
                 <div className="grid grid-cols-12 gap-6 ">
                     {/* ================= SIDEBAR ================= */}
-                    {<aside className={`col-span-12 md:col-span-3 bg-white shadow-lg rounded-2xl p-6 h-fit border border-gray-200 lg:sticky md:block lg:top-28
+                    {<aside className={`col-span-12 md:col-span-3 bg-white shadow-lg rounded-2xl p-6 h-fit border border-gray-200 lg:sticky md:block lg:top-24
     ${showFilterOption ? "block" : "hidden"} `}>
                         <div className="flex justify-between border-b border-gray-200 mb-6 pb-4">
                             <h3 className="font-bold text-xl text-gray-900   flex items-center gap-2">
@@ -143,7 +151,10 @@ export default function ProductsPage() {
                     <main className="col-span-12 md:col-span-9">
                         {isLoading === true ? <FeaturedProductsSkeleton></FeaturedProductsSkeleton> : products.length === 0 ? <ProductsNotFound></ProductsNotFound> :
                             <div>
-                                <h2 className="text-2xl font-semibold mb-5">All Products</h2>
+                                <div className="flex gap-3 items-center text-main  mb-5">
+                                    <AiOutlineProduct className="text-2xl"/>
+                                    <h2 className="text-2xl text-main font-semibold">All Products</h2>
+                                </div>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                                     {!isLoading &&
                                         products.map((product) => (
