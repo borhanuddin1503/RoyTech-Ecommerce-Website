@@ -19,7 +19,7 @@ export default function MyOrders() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const { data: session } = useSession();
-    
+
     useEffect(() => {
         console.log(session)
         if (session === undefined) return;
@@ -32,25 +32,19 @@ export default function MyOrders() {
         };
 
         const fetchOrders = async () => {
-            try {
-                setLoading(true)
-                const promise = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/orders?email=${session?.user?.email}`);
-                const res = await promise.json();
-                if (res.success === true) {
-                    setOrders(res.data);
-                }
-            } finally {
-                setLoading(false)
+
+            setLoading(true)
+            const promise = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/orders?email=${session?.user?.email}`);
+            const res = await promise.json();
+            if (res.success === true) {
+                setOrders(res.data);
             }
+
         };
 
         fetchOrders();
     }, [msg, session]);
 
-
-    if (loading) {
-        return <table className='max-w-7xl mx-auto px-4 py-4'><tbody><ProductsLoading></ProductsLoading></tbody></table>
-    }
 
 
 
@@ -113,7 +107,7 @@ export default function MyOrders() {
                                 <td className="p-4 text-lg font-bold text-gray-900">
                                     ৳{order.amount}
                                 </td>
-                                
+
                                 {/* Payment status */}
                                 <td className="p-4 text-sm text-gray-900">
                                     <PaymentBadge status={order.paymentStatus} method={order.paymentMethod}></PaymentBadge>

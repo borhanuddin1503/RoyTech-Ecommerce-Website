@@ -26,7 +26,7 @@ const CategoriesSection = async () => {
                 {categories.map((category) => (
                     <Link
                         key={category._id}
-                        href={`/categories/${category.slug}`}
+                        href={`/products?category=${category?.name}`}
                         className="group h-full"
                     >
                         <div className="bg-white h-full rounded-2xl p-4 shadow-sm border border-gray-200 hover:shadow-lg hover:border-main transition-all duration-300 transform group-hover:-translate-y-2 text-center">

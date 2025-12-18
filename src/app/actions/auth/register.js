@@ -28,3 +28,5 @@ export default async function register(userInfo) {
     const result = await usersCollection.insertOne(finalUserData);
     return ({ isSuccess: true, message: 'Sign Up Sucessfull' });
 }
+
+
