@@ -68,7 +68,7 @@ export default function ProductsPage() {
 
                 <div className="grid grid-cols-12 gap-6 ">
                     {/* ================= SIDEBAR ================= */}
-                    {<aside className={`col-span-12 md:col-span-3 bg-white shadow-lg rounded-2xl p-6 h-fit border border-gray-200 lg:sticky md:block lg:top-24
+                    {<aside className={`col-span-12 md:col-span-3 bg-white shadow-lg rounded-2xl p-6 h-fit border border-gray-200  md:block 
     ${showFilterOption ? "block" : "hidden"} `}>
                         <div className="flex justify-between border-b border-gray-200 mb-6 pb-4">
                             <h3 className="font-bold text-xl text-gray-900   flex items-center gap-2">

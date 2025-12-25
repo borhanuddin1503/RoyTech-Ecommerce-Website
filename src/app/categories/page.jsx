@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Swal from 'sweetalert2';
 import { TbCategory } from 'react-icons/tb';
+import ProductsNotFound from '../components/shared/Not-Found';
 
 // Fetch categories from API
 async function getCategories() {
@@ -16,10 +17,10 @@ async function getCategories() {
 const CategoriesBrowse = async () => {
     const categories = await getCategories();
 
-    if (categories.length < 1) return;
+    if (categories.length < 1) return <div className='flex min-h-[calc(100vh-100px)] items-center justify-center'><ProductsNotFound></ProductsNotFound></div>;
 
     return (
-        <section className="min-h-screen bg-gray-50 py-4">
+        <section className=" bg-gray-50 pt-4 pb-8">
             <div className="max-w-7xl mx-auto px-4">
                 {/* Header */}
                 <div className=" mb-5">

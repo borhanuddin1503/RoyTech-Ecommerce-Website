@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const CategoriesSection = async () => {
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/categories?limit=12`, {
         next: { tags: ['categories'], revalidate: 3600}
     });
     const categories = await res.json();
@@ -22,7 +22,7 @@ const CategoriesSection = async () => {
             </div>
 
             {/* Categories Grid */}
-            <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-6 gap-3 lg:gap-4">
+            <div className="grid grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4">
                 {categories.map((category) => (
                     <Link
                         key={category._id}

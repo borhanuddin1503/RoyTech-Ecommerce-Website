@@ -7,6 +7,7 @@ import Description from './Description';
 import Reviews from './Reviews';
 import VideoFrame from './VideoFrame';
 import ProductClient from './clientSelectors/productClient';
+import ProductsNotFound from '@/app/components/shared/Not-Found';
 
 export default async function page({ params }) {
     const { id } = await params;
@@ -17,10 +18,15 @@ export default async function page({ params }) {
     const product = await res.json();
 
 
-    const relatedProductsRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products?category=${product.category}&limit=5`, {
-        next: { tags: ['relatedProducts', product.category], revalidate: 3600 }
+    const relatedProductsRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products?category=${product?.category}&limit=5`, {
+        next: { tags: ['relatedProducts', product?.category], revalidate: 3600 }
     })
     const { products } = await relatedProductsRes.json();
+
+
+    if(!product){
+        return  <div className='min-h-[calc(100vh-100px)] flex items-center justify-center'><ProductsNotFound></ProductsNotFound></div>
+    }
 
     return (
         <div>

@@ -8,6 +8,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import Footer from "./components/footer/Footer";
+import WhatsAppButton from "./components/whatsapp/WhatsApp";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,12 +39,13 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" className="" >
       <body
-        className={`${poppins.className} `}
+        className={`${poppins.className} min-h-screen flex flex-col`}
       >
         <ReactQueryProvider>
           <NextAuthProvider>
             <Navbar serverSession={session}></Navbar>
-            {children}
+            <div className="shrink grow">{children}</div>
+            <WhatsAppButton/>
             <Footer></Footer>
           </NextAuthProvider>
         </ReactQueryProvider>

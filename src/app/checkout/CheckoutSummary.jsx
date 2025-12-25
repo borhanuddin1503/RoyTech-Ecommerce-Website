@@ -172,11 +172,11 @@ export default function CheckoutSummary({ items, total }) {
                             >
                                 <div className="flex items-center gap-3">
                                     <div className={`p-2 rounded-lg ${paymentMethod === "online" ? "bg-main" : "bg-gray-100"}`}>
-                                        <FiCreditCard className={`w-5 h-5 ${paymentMethod === "online       " ? "text-white" : "text-gray-600"}`} />
+                                        <FiCreditCard className={`w-5 h-5 ${paymentMethod === "online" ? "text-white" : "text-gray-600"}`} />
                                     </div>
                                     <div className="text-left">
-                                        <p className="font-semibold">Card / Debit / Credit</p>
-                                        <p className="text-sm text-gray-500">Pay securely with your card</p>
+                                        <p className="font-semibold">Bkash / Nagad / Rocket / Card</p>
+                                        <p className="text-sm text-gray-500">Pay securely</p>
                                     </div>
                                 </div>
                                 {paymentMethod === "online" && <FiCheck className="w-5 h-5 text-main" />}
